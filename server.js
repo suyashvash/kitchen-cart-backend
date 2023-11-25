@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 // import taskRouter from './routes/task.js'
 import userRouter from './routes/user.js';
+import productRouter from './routes/product.js';
+
 
 dotenv.config();
 
@@ -23,7 +25,7 @@ connection.once('open', () => {
     console.log("MongoDB database connection established sucessfully !");
 })
 
-// app.use('/api/tasks', taskRouter);
+app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
 
 app.listen(port, () => {

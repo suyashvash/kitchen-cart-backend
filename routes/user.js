@@ -1,6 +1,6 @@
 import { Router } from "express";
 import User from "../models/user.model.js";
-import { sendResponse } from "../middleware/response.js";
+import { sendResponse } from "../middleware/sendResponse.js";
 
 
 const userRouter = Router();
