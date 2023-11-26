@@ -8,6 +8,7 @@ const userSchema = Schema({
     fullName: { type: String },
     email: { type: String },
     address: { type: String },
+    cart: { type: Array },
 
 }, { timestamps: true });
 

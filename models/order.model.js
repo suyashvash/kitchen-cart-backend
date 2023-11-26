@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Product from "./product.model";
+import Product from "./product.model.js";
 
 const Schema = mongoose.Schema;
 
@@ -10,7 +10,7 @@ const orderSchema = Schema({
     quantity: { type: Number, required: true },
     address: { type: String, required: true },
     totalPrice: { type: Number, required: true },
-    product : { type: Product, required: true }
+    product : { type: Object, required: true }
 }, { timestamps: true });
 
 const Order = mongoose.model('Order', orderSchema);

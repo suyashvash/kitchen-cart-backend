@@ -9,7 +9,7 @@ const productRouter = Router();
 productRouter.route('/').get((req, res) => {
     Product.find()
         .then(products => sendResponse(res, true, products, "Products found !", 200))
-        .catch(err => sendResponse(res, false, null, "Products not found !", 400));
+        .catch(err => sendResponse(res, false, err, "Products not found !", 400));
 }
 );
 
@@ -31,7 +31,7 @@ productRouter.route('/add').post((req, res) => {
 
         newProduct.save()
             .then(() => sendResponse(res, true, newProduct, "Product added !", 200))
-            .catch(err => sendResponse(res, false, null, "Product not added !", 400));
+            .catch(err => sendResponse(res, false, err, "Product not added !", 400));
     }else{
         sendResponse(res, false, null, "You are not authorized to add product !", 401);
     }
@@ -40,7 +40,7 @@ productRouter.route('/add').post((req, res) => {
 productRouter.route('/:id').get((req, res) => {
     Product.findById(req.params.id)
         .then(product => sendResponse(res, true, product, "Product found !", 200))
-        .catch(err => sendResponse(res, false, null, "Product not found !", 400));
+        .catch(err => sendResponse(res, false, err, "Product not found !", 400));
 })
 
 productRouter.route('/:id').delete((req, res) => {
@@ -49,7 +49,7 @@ productRouter.route('/:id').delete((req, res) => {
     if (user == 'admin@123') {
         Product.findByIdAndDelete(req.params.id)
             .then(() => sendResponse(res, true, null, "Product deleted !", 200))
-            .catch(err => sendResponse(res, false, null, "Product not deleted !", 400));
+            .catch(err => sendResponse(res, false, err, "Product not deleted !", 400));
     }else{
         sendResponse(res, false, null, "You are not authorized to delete product !", 401);
     }
@@ -72,9 +72,9 @@ productRouter.route('/update/:id').post((req, res) => {
 
                 product.save()
                     .then(() => sendResponse(res, true, product, "Product updated !", 200))
-                    .catch(err => sendResponse(res, false, null, "Product not updated !", 400));
+                    .catch(err => sendResponse(res, false, err, "Product not updated !", 400));
             })
-            .catch(err => sendResponse(res, false, null, "Product not found !", 400));
+            .catch(err => sendResponse(res, false, err, "Product not found !", 400));
     }else{
         sendResponse(res, false, null, "You are not authorized to update product !", 401);
     }

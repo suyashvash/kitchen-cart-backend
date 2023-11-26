@@ -9,18 +9,18 @@ userRouter.route('/all').get((req, res) => {
 
     User.find()
         .then(users => sendResponse(res, true, users, "Users found !", 200))
-        .catch(err => sendResponse(res, false, null, "Users not found !", 400));
+        .catch(err => sendResponse(res, false, err, "Users not found !", 400));
 })
 
 userRouter.route('/signup').post((req, res) => {
 
     const { email, password } = req.body;
     const username = email.split('@')[0];
-    const newUser = new User({ username, password, fullName: "", email, address: "" });
+    const newUser = new User({ username, password, fullName: "", email, address: "",cart:[] });
 
     newUser.save()
         .then(() => sendResponse(res, true, null, "User added !", 200))
-        .catch(err => sendResponse(res, false, null, "User not added !", 400));
+        .catch(err => sendResponse(res, false, err, "User not added !", 400));
 });
 
 
@@ -29,7 +29,7 @@ userRouter.route('/login').post((req, res) => {
 
     User.find({ email, password })
         .then((user) => sendResponse(res, true, { token: user[0]._id, loggedIn: true }, "User found !", 200))
-        .catch(err => sendResponse(res, false, null, "User not found !", 400));
+        .catch(err => sendResponse(res, false, err, "User not found !", 400));
 })
 
 
@@ -51,9 +51,9 @@ userRouter.route('/update').put((req, res) => {
             user
                 .save()
                 .then(() => sendResponse(res, true, null, "User updated !", 200))
-                .catch((err) => sendResponse(res, false, null, "User not updated !", 400));
+                .catch((err) => sendResponse(res, false, err, "User not updated !", 400));
         })
-        .catch((err) => res.status(400).json("Error- " + err));
+        .catch((err) => sendResponse(res, false, err, "User not found !", 400));
 });
 
 
