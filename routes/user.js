@@ -36,7 +36,12 @@ userRouter.route('/login').post((req, res) => {
 
     User.find({ email, password })
         .then((user) => sendResponse(res, true, { token: user[0]._id, loggedIn: true }, "User found !", 200))
-        .catch(err => sendResponse(res, false, err, "User not found !", 400));
+        .catch(err => {
+            console.log(err)
+            console.log({ email, password })
+            sendResponse(res, false, { email, password }, "User not found !", 400)
+        
+        });
 })
 
 
