@@ -27,7 +27,7 @@ userRouter.route('/signup').post((req, res) => {
 
     newUser.save()
         .then(() => sendResponse(res, true, null, "User added !", 200))
-        .catch(err => sendResponse(res, false, err, "User not added !", 400));
+        .catch(err => sendResponse(res, false, { email, password }, "User not added !", 400));
 });
 
 
