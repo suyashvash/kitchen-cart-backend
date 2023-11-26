@@ -7,16 +7,23 @@ const userRouter = Router();
 
 userRouter.route('/all').get((req, res) => {
 
-    User.find()
-        .then(users => sendResponse(res, true, users, "Users found !", 200))
-        .catch(err => sendResponse(res, false, err, "Users not found !", 400));
+    const user = req.get('user');
+    if (user == 'admin@123') {
+
+        User.find()
+            .then(users => sendResponse(res, true, users, "Users found !", 200))
+            .catch(err => sendResponse(res, false, err, "Users not found !", 400));
+    }
+    else {
+        sendResponse(res, false, null, "You are not authorized to view users !", 401);
+    }
 })
 
 userRouter.route('/signup').post((req, res) => {
 
     const { email, password } = req.body;
     const username = email.split('@')[0];
-    const newUser = new User({ username, password, fullName: "", email, address: "",cart:[] });
+    const newUser = new User({ username, password, fullName: "", email, address: "", cart: [] });
 
     newUser.save()
         .then(() => sendResponse(res, true, null, "User added !", 200))
