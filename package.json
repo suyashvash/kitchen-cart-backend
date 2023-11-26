@@ -4,6 +4,9 @@
   "description": "Backend for Kitchen Cart iOS App",
   "main": "server.js",
   "type": "module",
+  "engine":{
+    "node": ">=16.20.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
