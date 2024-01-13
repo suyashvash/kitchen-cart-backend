@@ -35,7 +35,7 @@ userRouter.route('/login').post((req, res) => {
     const { email, password } = req.body;
 
     User.find({ email, password })
-        .then((user) => sendResponse(res, true, { token: user[0]._id, loggedIn: true }, "User found !", 200))
+        .then((user) => sendResponse(res, true, { token: user[0]._id, loggedIn: true,userId:user[0]._id,email:user[0].email,username:user[0].username }, "User found !", 200))
         .catch(err => {
             console.log(err)
             console.log({ email, password })
