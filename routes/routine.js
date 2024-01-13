@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { sendResponse } from "../middleware/sendResponse";
+import { sendResponse } from "../middleware/sendResponse.js";
 
 const routineRouter = Router();
 
