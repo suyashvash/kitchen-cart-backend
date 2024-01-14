@@ -14,8 +14,28 @@ cartRouter.route('/').get((req, res) => {
     User.findOne({ _id: userId })
         .then(user => {
             if (user) {
-                const cart = user.cart;
-                sendResponse(res, true, cart, "Cart found !", 200);
+                let cart = user.cart;
+                let temp = []
+                cart.forEach((element, index) => {
+                    Product.findOne({ _id: element.productId })
+                        .then(product => {
+                            if (product) {
+
+                                element.product = product;
+                                temp.push(element)
+                                console.log(temp.length);
+                                console.log(cart.length);
+
+                                if (temp.length == cart.length) {
+                                    sendResponse(res, true, temp, "Cart found !", 200)
+                                }
+                            }
+                        })
+                        .catch(err => sendResponse(res, false, err, "Product not found !", 400));
+
+
+                })
+
             } else {
                 sendResponse(res, false, null, "Cart not found !", 400);
             }
@@ -36,8 +56,9 @@ cartRouter.route("/add").post((req, res) => {
                     productId,
                     userId,
                     quantity,
-                    totalPrice : quantity * product.price,
+                    totalPrice: quantity * product.price,
                     basePrice: product.price,
+
                 })
 
                 User.findOne({ _id: userId })
