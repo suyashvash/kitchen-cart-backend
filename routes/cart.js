@@ -129,7 +129,7 @@ cartRouter.route("/delete").delete((req, res) => {
                 if (thisItem) {
                     user.cart = user.cart.filter(item => item._id != cartItemId);
                     user.save()
-                        .then(() => sendResponse(res, true, null, "Cart item deleted !", 200))
+                        .then(() => sendResponse(res, true, 'null', "Cart item deleted !", 200))
                         .catch(err => sendResponse(res, false, err, "Cart item not deleted !", 400));
                 } else {
                     sendResponse(res, false, null, "Cart item not found !", 400);
