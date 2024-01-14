@@ -15,6 +15,11 @@ cartRouter.route('/').get((req, res) => {
         .then(user => {
             if (user) {
                 let cart = user.cart;
+                if(user.cart.length==0){
+                    sendResponse(res, true, [], "Cart found !", 200)
+                    return
+                }
+
                 let temp = []
                 cart.forEach((element, index) => {
                     Product.findOne({ _id: element.productId })
@@ -92,7 +97,10 @@ cartRouter.route("/updateQuantity").put((req, res) => {
                 if (thisItem) {
                     thisItem.quantity = quantity;
                     thisItem.totalPrice = quantity * thisItem.basePrice;
-                    user.cart = thisItem
+                    let temp = user.cart
+                    let thisIndex = temp.findIndex(item => item._id == cartItemId);
+                    temp[thisIndex] = thisItem;
+                    user.cart = temp;
                     user.save()
                         .then(() => {
                             console.log(user);
