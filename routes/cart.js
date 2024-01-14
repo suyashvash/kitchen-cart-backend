@@ -92,8 +92,11 @@ cartRouter.route("/updateQuantity").put((req, res) => {
                 if (thisItem) {
                     thisItem.quantity = quantity;
                     thisItem.totalPrice = quantity * thisItem.basePrice;
+                    user.cart = thisItem
                     user.save()
-                        .then(() => sendResponse(res, true, thisItem, "Cart item updated !", 200))
+                        .then(() => {
+                            console.log(user);
+                            sendResponse(res, true, thisItem, "Cart item updated !", 200)})
                         .catch(err => sendResponse(res, false, err, "Cart item not updated !", 400));
                 } else {
                     sendResponse(res, false, null, "Cart item not found !", 400);
