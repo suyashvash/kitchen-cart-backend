@@ -61,7 +61,7 @@ cartRouter.route("/add").post((req, res) => {
                 if(user.cart.length > 0){
                     let thisItem = user.cart.find(item => item.productId == productId)
                     if(thisItem){
-                        sendResponse(res, false, null, "Item already in cart !", 400);
+                        sendResponse(res, false, 'null', "Item already in cart !", 400);
                         return
                     }
 
