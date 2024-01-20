@@ -28,34 +28,50 @@ orderRouter.route('/').get((req, res) => {
 
 orderRouter.route("/add").post((req, res) => {
     const userId = req.get('token');
-    const { productId, quantity, address } = req.body;
+    const { address } = req.body;
 
 
     User.findOne({ _id: userId })
         .then(user => {
             if (user) {
-                Product.findOne({ _id: productId })
-                    .then(product => {
-                        if (product) {
+                let totalCartPrice = 0;
+                let cart = user.cart;
+                let products = [];
 
-                            const newOrder = new Order({
-                                productId,
-                                userId: userId,
-                                quantity,
-                                address,
-                                totalPrice: quantity * product.price,
-                                product,
-                                status: "Accepted"
+                if (cart.length == 0) {
+                    sendResponse(res, false, null, "Cart is empty !", 400);
+                    return
+                } else {
+                    cart.forEach((element, index) => {
+                        Product.findOne({ _id: element.productId })
+                            .then(product => {
+                                if (product) {
+                                    totalCartPrice += element.quantity * product.price;
+                                    products.push({
+                                        productId: product._id,
+                                        quantity: element.quantity,
+                                        basePrice: product.price,
+                                        product: product
+                                    })
+
+                                    if (products.length == cart.length) {
+                                        const newOrder = new Order({
+                                            userId: userId,
+                                            address,
+                                            totalPrice: totalCartPrice,
+                                            status: "Accepted",
+                                            products: products
+                                        })
+
+                                        newOrder.save()
+                                            .then(() => sendResponse(res, true, newOrder, "Order placed !", 200))
+                                            .catch(err => sendResponse(res, false, err, "Order not placed !", 400));
+                                    }
+                                }
                             })
-
-                            newOrder.save()
-                                .then(() => sendResponse(res, true, newOrder, "Order placed !", 200))
-                                .catch(err => sendResponse(res, false, err, "Order not placed !", 400));
-                        } else {
-                            sendResponse(res, false, null, "Product not found !", 400);
-                        }
+                            .catch(err => sendResponse(res, false, err, "Product not found !", 400));
                     })
-                    .catch(err => sendResponse(res, false, err, "Product not found !", 400));
+                }
             } else {
                 sendResponse(res, false, null, "User not found !", 400);
             }

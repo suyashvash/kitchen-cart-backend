@@ -27,9 +27,10 @@ cartRouter.route('/').get((req, res) => {
                             if (product) {
 
                                 element.product = product;
+                                element.totalPrice = element.quantity * product.price;
+                                element.basePrice = product.price;
+
                                 temp.push(element)
-                                console.log(temp.length);
-                                console.log(cart.length);
 
                                 if (temp.length == cart.length) {
                                     sendResponse(res, true, temp, "Cart found !", 200)
@@ -61,9 +62,6 @@ cartRouter.route("/add").post((req, res) => {
                     productId,
                     userId,
                     quantity,
-                    totalPrice: quantity * product.price,
-                    basePrice: product.price,
-
                 })
 
                 User.findOne({ _id: userId })
@@ -93,12 +91,13 @@ cartRouter.route("/updateQuantity").put((req, res) => {
     User.findOne({ _id: userId })
         .then(user => {
             if (user) {
-                let thisItem = user.cart.find(item => item._id == cartItemId);
+                let thisItem = user.cart.find(item => item.productId == cartItemId);
+                console.log(user.cart);
                 if (thisItem) {
                     thisItem.quantity = quantity;
-                    thisItem.totalPrice = quantity * thisItem.basePrice;
+                   
                     let temp = user.cart
-                    let thisIndex = temp.findIndex(item => item._id == cartItemId);
+                    let thisIndex = temp.findIndex(item => item.productId == cartItemId);
                     temp[thisIndex] = thisItem;
                     user.cart = temp;
                     user.save()
@@ -125,9 +124,9 @@ cartRouter.route("/delete").delete((req, res) => {
     User.findOne({ _id: userId })
         .then(user => {
             if (user) {
-                let thisItem = user.cart.find(item => item._id == cartItemId);
+                let thisItem = user.cart.find(item => item.productId == cartItemId);
                 if (thisItem) {
-                    user.cart = user.cart.filter(item => item._id != cartItemId);
+                    user.cart = user.cart.filter(item => item.productId != cartItemId);
                     user.save()
                         .then(() => sendResponse(res, true, 'null', "Cart item deleted !", 200))
                         .catch(err => sendResponse(res, false, err, "Cart item not deleted !", 400));
