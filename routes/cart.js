@@ -146,16 +146,16 @@ cartRouter.route("/delete").delete((req, res) => {
                     user.cart = user.cart.filter(item => item.productId != productId);
                     user.save()
                         .then(() => sendResponse(res, true, 'null', "Cart item deleted !", 200))
-                        .catch(err => sendResponse(res, false, err, "Cart item not deleted !", 400));
+                        .catch(err => sendResponse(res, false, 'err', "Cart item not deleted !", 400));
                 } else {
-                    sendResponse(res, false, null, "Cart item not found !", 400);
+                    sendResponse(res, false, 'null', "Cart item not found !", 400);
                 }
 
             } else {
-                sendResponse(res, false, null, "User not found !", 400);
+                sendResponse(res, false, 'null', "User not found !", 400);
             }
         })
-        .catch(err => sendResponse(res, false, err, "User not found !", 400));
+        .catch(err => sendResponse(res, false, 'err', "User not found !", 400));
 })
 
 export default cartRouter;
