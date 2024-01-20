@@ -102,18 +102,18 @@ cartRouter.route("/add").post((req, res) => {
 
 cartRouter.route("/updateQuantity").put((req, res) => {
     const userId = req.get('token');
-    const { quantity, cartItemId } = req.body;
+    const { quantity, productId } = req.body;
 
     User.findOne({ _id: userId })
         .then(user => {
             if (user) {
-                let thisItem = user.cart.find(item => item.productId == cartItemId);
+                let thisItem = user.cart.find(item => item.productId == productId);
                 console.log(user.cart);
                 if (thisItem) {
                     thisItem.quantity = quantity;
 
                     let temp = user.cart
-                    let thisIndex = temp.findIndex(item => item.productId == cartItemId);
+                    let thisIndex = temp.findIndex(item => item.productId == productId);
                     temp[thisIndex] = thisItem;
                     user.cart = temp;
                     user.save()
@@ -136,14 +136,14 @@ cartRouter.route("/updateQuantity").put((req, res) => {
 
 cartRouter.route("/delete").delete((req, res) => {
     const userId = req.get('token');
-    const { cartItemId } = req.body;
+    const { productId } = req.body;
 
     User.findOne({ _id: userId })
         .then(user => {
             if (user) {
-                let thisItem = user.cart.find(item => item.productId == cartItemId);
+                let thisItem = user.cart.find(item => item.productId == productId);
                 if (thisItem) {
-                    user.cart = user.cart.filter(item => item.productId != cartItemId);
+                    user.cart = user.cart.filter(item => item.productId != productId);
                     user.save()
                         .then(() => sendResponse(res, true, 'null', "Cart item deleted !", 200))
                         .catch(err => sendResponse(res, false, err, "Cart item not deleted !", 400));
