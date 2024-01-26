@@ -39,7 +39,7 @@ orderRouter.route("/add").post((req, res) => {
                 let products = [];
 
                 if (cart.length == 0) {
-                    sendResponse(res, false, null, "Cart is empty !", 400);
+                    sendResponse(res, false, 'null', "Cart is empty !", 400);
                     return
                 } else {
                     cart.forEach((element, index) => {
@@ -64,19 +64,19 @@ orderRouter.route("/add").post((req, res) => {
                                         })
 
                                         newOrder.save()
-                                            .then(() => sendResponse(res, true, newOrder, "Order placed !", 200))
-                                            .catch(err => sendResponse(res, false, err, "Order not placed !", 400));
+                                            .then(() => sendResponse(res, true, 'newOrder', "Order placed !", 200))
+                                            .catch(err => sendResponse(res, false, 'err', "Order not placed !", 400));
                                     }
                                 }
                             })
-                            .catch(err => sendResponse(res, false, err, "Product not found !", 400));
+                            .catch(err => sendResponse(res, false, 'err', "Product not found !", 400));
                     })
                 }
             } else {
-                sendResponse(res, false, null, "User not found !", 400);
+                sendResponse(res, false, 'null', "User not found !", 400);
             }
         })
-        .catch(err => sendResponse(res, false, err, "User not found !", 400));
+        .catch(err => sendResponse(res, false, 'err', "User not found !", 400));
 })
 
 orderRouter.route("/markDelivered").put((req, res) => {
