@@ -62,7 +62,8 @@ orderRouter.route("/add").post((req, res) => {
                                             status: "Accepted",
                                             products: products
                                         })
-
+                                        user.cart = []
+                                        user.save()
                                         newOrder.save()
                                             .then(() => sendResponse(res, true, 'newOrder', "Order placed !", 200))
                                             .catch(err => sendResponse(res, false, 'err', "Order not placed !", 400));
